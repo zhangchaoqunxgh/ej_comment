@@ -53,11 +53,7 @@ export default {
       })
     },
     submitHandler(){
-      //this.form 对象 ---字符串--> 后台 {type:'customer',age:12}
-      // json字符串 '{"type":"customer","age":12}'
-      // request.post(url,this.form)
-      // 查询字符串 type=customer&age=12
-      // 通过request与后台进行交互，并且要携带参数
+      
       let url = "http://localhost:6677/category/saveOrUpdate";
       request({
         url,
@@ -85,15 +81,25 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
+        //调用后台接口完成删除操作request
+        let url="http://localhost:6677/category/deleteById?id="+id;
+        request.get(url).then((response)=>{
+          //刷新数据
+          this.loadData();
+          //提示结果
+          this.$message({
           type: 'success',
-          message: '删除成功!'
+          message:"删除成功"
         });
+        })
       })
       
     },
-    toUpdateHandler(){
-      this.visible = true;
+    toUpdateHandler(row){
+      //显示模态框当前信息
+      this.title="修改顾客信息";
+      this.form=row;
+      this.visible = true;//打开模态框
     },
     closeModalHandler(){
       this.visible = false;
