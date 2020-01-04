@@ -79,7 +79,7 @@
     },
     methods:{
         submitHandler(){
-            let url="http://134.175.154.93:6677/address/saveOrUpdate "
+            let url="http://localhost:6677/address/saveOrUpdate  "
             //前端向后台发送请求，完成数据的保存操作
             request({
                 url,method:"post",
@@ -101,24 +101,31 @@
         },
         loadDate(){
             //this=>指向vue实例，通过vue实例访问该实例中数据
-            let url="http://134.175.154.93:6677/address/findAll"
+            let url="http://localhost:6677/address/findAll"
             request.get(url).then(response=>{
                 this.addresses=response.data;
             })
         },
         toDeleteHandler(id){
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
+        //调用后台接口完成删除操作request
+        let url="http://localhost:6677/address/deleteById?id="+id;
+        request.get(url).then((response)=>{
+          //刷新数据
+          this.loadData();
+          //提示结果
+          this.$message({
           type: 'success',
-          message: '删除成功!'
+          message:"删除成功"
         });
+        })
       })
       
-        },
+    },
         toUpdateHandler(row){
             this.form-=row;
             this.title="编辑地址信息";
