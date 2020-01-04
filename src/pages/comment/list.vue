@@ -15,7 +15,7 @@
           <a href="" class="el-icon-edit" @click.prevent="toUpdateHandler(slot.row)"></a>
         <a href="" class="el-icon-delete"  @click.prevent="toDeleteHandler(slot.row.id)"></a>
         </template>
-      </el-table-column>
+      </el-table-column> 
     </el-table>
     <!-- /表格结束 -->
     <!-- 分页开始 -->
