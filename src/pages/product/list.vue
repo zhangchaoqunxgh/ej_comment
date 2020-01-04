@@ -27,10 +27,10 @@
 <!--/分页-->
 <!--模态框-->
  <el-dialog
-      title="录入产品信息"
+      :title="title"
       :visible.sync="visible"
       width="60%">
-      测试：{{form}}
+      --{{form}}
       <el-form :model="form" label-width="80px">
           <el-form-item label="编号">
               <el-input v-model="form.id"/>
@@ -63,15 +63,14 @@ import request from '@/utils/request'
 import querystring from 'querystring'
 export default {
     data(){
-        return{
-            title:"录入产品信息",
-            visible:false,
-            products:[],
-            form:{
-                type:"product"
-            }
-        }
-    },
+    return {
+      visible:false,
+      products:[],
+      form:{
+        type:"product"
+      }
+    }
+  },
     created(){
         this.loadDate()
     },
@@ -111,7 +110,7 @@ export default {
         type: 'warning'
       }).then(() => {
         //调用后台接口完成删除操作request
-        let url="http://localhost:6677/category/deleteById?id="+id;
+        let url="http://localhost:6677/product/deleteById?id="+id;
         request.get(url).then((response)=>{
           //刷新数据
           this.loadData();
@@ -125,8 +124,8 @@ export default {
       
     },
         toUpdateHandler(row){
-            this.form-=row;
             this.title="编辑产品信息";
+            this.form-=row;
             this.visible=true;
         },
         toAddHandler(){
