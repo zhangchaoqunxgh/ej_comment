@@ -33,6 +33,9 @@
       width="60%">
       测试：{{form}}
       <el-form :model="form" label-width="80px">
+          <el-form-item label="编号">
+              <el-input v-model="form.id"/>
+          </el-form-item>
           <el-form-item label="用户名">
               <el-input v-model="form.username"/>
           </el-form-item>
@@ -47,7 +50,6 @@
             <el-radio label="男">男</el-radio>
             <el-radio label="女">女</el-radio>
              </el-radio-group>
-              <el-input/>
           </el-form-item>
            <el-form-item label="手机号">
               <el-input v-model="form.telephone"/>
@@ -81,7 +83,7 @@ export default {
             visible:false,
             employees:[],
             form:{
-                type:"waiter"
+                type:"employee"
             }
         }
     },
@@ -123,7 +125,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let url="http://localhost:6677/customer/deleteById?id="+id;
+        let url="http://localhost:6677/waiter/deleteById?id="+id;
         request.get(url).then((response)=>{
           //刷新数据
           this.loadData();

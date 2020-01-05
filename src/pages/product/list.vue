@@ -30,11 +30,8 @@
       :title="title"
       :visible.sync="visible"
       width="60%">
-      --{{form}}
+      ---{{form}}
       <el-form :model="form" label-width="80px">
-          <el-form-item label="编号">
-              <el-input v-model="form.id"/>
-          </el-form-item>
            <el-form-item label="产品名称">
               <el-input  v-model="form.name"/>
           </el-form-item>
@@ -42,10 +39,16 @@
                <el-input v-model="form.price"/>
           </el-form-item>
            <el-form-item label="描述">
-              <el-input v-model="form.description"/>
+              <el-input type="textarea" v-model="form.description"/>
           </el-form-item>
            <el-form-item label="所属产品">
-              <el-input v-model="form.categoryId"/>
+               <el-select v-model="form.categoryId">
+                   <el-option
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"></el-option>
+               </el-select>
           </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -62,24 +65,14 @@
 import request from '@/utils/request'
 import querystring from 'querystring'
 export default {
-    data(){
-    return {
-      visible:false,
-      products:[],
-      form:{
-        type:"product"
-      }
-    }
-  },
-    created(){
-        this.loadDate()
-    },
+   
     methods:{
         submitHandler(){
             let url="http://localhost:6677/product/saveOrUpdate"
             //前端向后台发送请求，完成数据的保存操作
             request({
-                url,method:"post",
+                url,
+                method:"post",
                 //告诉给后台我的请求体中放的查询字符串
                 headers:{
                     "content-type":"application/x-www-form-urlencoded"
@@ -101,6 +94,13 @@ export default {
             let url="http://localhost:6677/product/findAll"
             request.get(url).then(response=>{
                 this.products=response.data;
+            })
+        },
+        loadCategory(){
+            //this=>指向vue实例，通过vue实例访问该实例中数据
+            let url="http://localhost:6677/category/findAll"
+            request.get(url).then(response=>{
+                this.options=response.data;
             })
         },
        toDeleteHandler(id){
@@ -125,17 +125,30 @@ export default {
     },
         toUpdateHandler(row){
             this.title="编辑产品信息";
-            this.form-=row;
+            this.form=row;
             this.visible=true;
         },
         toAddHandler(){
+            this.form={}
             this.title="录入产品信息";
             this.visible=true;
         },
         closeModalHandler(){
             this.visible=false;
-        }
+        }},
+         data(){
+    return {
+      visible:false,
+      products:[],
+      options:[],
+      form:{}
     }
+  },
+    created(){
+        this.loadDate()
+        this.loadCategory()
+    }
+
 }
 </script>
 
