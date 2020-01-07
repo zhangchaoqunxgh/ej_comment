@@ -11,8 +11,9 @@
     <el-table-column fixed="left" prop="id" label="编号"></el-table-column>
     <el-table-column fixed="left" prop="name" label="产品名称"></el-table-column>
     <el-table-column prop="price" label="价格"></el-table-column>
-    <el-table-column prop="description" label="描述"></el-table-column>
+    <el-table-column width="200px" prop="description" label="描述"></el-table-column>
     <el-table-column prop="categoryId"  label="所属产品"></el-table-column>
+    <el-table-column width="650px" prop="photo"  label="照片"></el-table-column>
     <el-table-column fixed="right" label="操作">
         <template v-slot="slot">
         <a href="" class="el-icon-edit" @click.prevent="toUpdateHandler(slot.row)"></a>
@@ -50,6 +51,17 @@
                     :value="item.id"></el-option>
                </el-select>
           </el-form-item>
+           <el-form-item label="图片">
+              <el-upload
+                class="upload-demo"
+                action="https://134.175.154.93:6677/file/upload"
+                :on-success="uploadSuccessHandler"
+                :file-list="fileList"
+                list-type="picture">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
+          </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="closeModalHandler">取 消</el-button>
@@ -67,6 +79,10 @@ import querystring from 'querystring'
 export default {
    
     methods:{
+        uploadSuccessHandler(response){
+            let photo="http://134.175.154.93:8888/group1"+response.data.id
+            console.log(response);
+        },
         submitHandler(){
             let url="http://localhost:6677/product/saveOrUpdate"
             //前端向后台发送请求，完成数据的保存操作
@@ -141,7 +157,8 @@ export default {
       visible:false,
       products:[],
       options:[],
-      form:{}
+      form:[],
+      fileList:[]
     }
   },
     created(){
