@@ -26,7 +26,7 @@
       title="填写评论"
       :visible.sync="visible"
       width="60%">
-        ---{{form}}
+       
       <el-form :model="form" label-width="80px">
         <el-form-item label="编号">
           <el-input v-model="form.id"></el-input>
